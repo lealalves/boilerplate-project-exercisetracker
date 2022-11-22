@@ -6,4 +6,4 @@ const addExercise = (req, res) => {
   console.log(description);
 }
 
-module.exports = { addExersise }
+module.exports = { addExercise }
