@@ -14,7 +14,7 @@ const addUser = async (req, res) => {
 		return res.send({username: data.username, _id: data._id})
 	})
 	.catch(err => {
-		res.send(err.errors.username.properties['message'])
+		res.send(err)
 	})
 }
 
