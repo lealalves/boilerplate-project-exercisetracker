@@ -1,9 +1,37 @@
 const Exercise = require('../models/Exercise')
+const User = require('../models/User')
 
-const addExercise = (req, res) => {
+const addExercise = async (req, res) => {
   const { description, duration, date } = req.body
-  console.log(req.params._id);
-  console.log(description);
+  
+  const idUser = req.params._id
+
+  User.findById(idUser)
+  .then(user => {
+    if(!user) return res.send({message: 'User not found'})    
+
+    const exercise = new Exercise({
+      userId: idUser,
+      username: user.username,
+      duration: Number(duration),
+      description: description,
+      date: date.length > 0 ? date : Date.now()
+    })
+
+    exercise.save()
+    .then(({username, description, date, duration, userId}) => {
+      res.send({
+        username: username,
+        description: description,
+        duration: duration,
+        date: date.toDateString(),
+        _id: userId
+      })
+    })
+    .catch(err => res.send(err))
+
+  })
+  .catch(err => res.send(err))  
 }
 
 module.exports = { addExercise }
