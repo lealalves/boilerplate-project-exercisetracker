@@ -24,6 +24,9 @@ app.route('/api/users')
 app.route('/api/users/:_id/exercises')
 .post((req, res) => exerciseController.addExercise(req, res))
 
+app.route('/api/users/:_id/logs:from?:to?:limit?')
+.get((req, res) => exerciseController.listExercise(req, res))
+
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
