@@ -37,11 +37,15 @@ const addExercise = async (req, res) => {
 const listExercise = (req, res) => {
 	const userId = req.params._id
 
+  const limitQuery = req.query.limit
+  const fromDateQuery = req.query.from != undefined ? req.query.from : 0
+  const toDateQuery = req.query.to != undefined ? req.query.to : Date.now()
+  
 	User.findById(userId)
 	.then(user => {
 		if(!user) return res.send({message: 'User not found'})
 
-		Exercise.find({userId: userId})
+		Exercise.find({userId: userId, date: {$gte: fromDateQuery, $lte: toDateQuery}}).limit(limitQuery).sort({$natural:-1})
 		.then(data => {
 			let exercises = data.map(({description, duration, date}) => {
 				return {
